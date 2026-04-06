@@ -34,10 +34,15 @@ export function InteractiveLaptop(props: any) {
         {/* Embedded UI with infinite loop simulation */}
         <Html
           transform
-          position={[0, 0, 0.01]}
-          distanceFactor={1.2} // <-- Tăng tỷ lệ này lên để màn hình to ra (trước là 1.07)
-          zIndexRange={[0, 0]}
-          className="flex justify-center items-center"
+          occlude
+          position={[0, 0, 0.02]} // Slightly more offset to prevent z-fighting
+          distanceFactor={1.2}
+          zIndexRange={[1, 1]} // Ensure it's above the mesh but still occludable
+          className="flex justify-center items-center pointer-events-none"
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+          }}
         >
           <div
             style={{

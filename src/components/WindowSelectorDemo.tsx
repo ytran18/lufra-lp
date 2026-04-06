@@ -68,8 +68,9 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
         if (!mounted) break;
 
         // 2. Move to first item's play button
-        setCursorPos({ x: 920, y: 250 });
-        await new Promise((r) => setTimeout(r, 1200));
+        // Coordinates refined: x: 885 (right align minus padding), y: 255 (first item center)
+        setCursorPos({ x: 885, y: 255 });
+        await new Promise((r) => setTimeout(r, 1000));
         if (!mounted) break;
 
         // 3. Click down
@@ -79,18 +80,20 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
 
         // 4. Click up + trigger action
         setCursorScale(1);
+        await new Promise((r) => setTimeout(r, 200)); // Small delay for click feel
         setIsStreaming(true);
         setSelectedId("public");
         await new Promise((r) => setTimeout(r, 1000));
         if (!mounted) break;
 
-        // 5. Move to PIP window
-        setCursorPos({ x: 750, y: 480 });
+        // 5. Move to PIP window center
+        setCursorPos({ x: 740, y: 560 });
         await new Promise((r) => setTimeout(r, 2000));
         if (!mounted) break;
 
-        // 6. Move back to stop button (item moves down due to selected windows list header)
-        setCursorPos({ x: 920, y: 260 });
+        // 6. Move back to stop button (item moves down due to "Selected Windows" header)
+        // Header + Margin adds ~80px of vertical space
+        setCursorPos({ x: 885, y: 335 });
         await new Promise((r) => setTimeout(r, 1500));
         if (!mounted) break;
 
@@ -101,6 +104,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
 
         // 8. Click up + close stream
         setCursorScale(1);
+        await new Promise((r) => setTimeout(r, 200));
         setIsStreaming(false);
 
         // 9. Move cursor away
@@ -229,8 +233,8 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
               active
                 ? "bg-[#FF3B30] text-white hover:bg-red-600 border-none"
                 : isSelected
-                ? "bg-white/20 text-white hover:bg-white/30 border-none"
-                : "bg-[#2c2c2e] text-white/80 hover:text-white border border-white/10"
+                  ? "bg-white/20 text-white hover:bg-white/30 border-none"
+                  : "bg-[#2c2c2e] text-white/80 hover:text-white border border-white/10"
             )}
           >
             {active ? (
@@ -245,7 +249,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
   };
 
   return (
-    <div 
+    <div
       className={classNames(
         "mx-auto overflow-hidden bg-[#1c1c1e] text-white font-sans relative selection:bg-blue-500/30 select-none",
         autoPlay ? "w-full h-full shadow-none rounded-none border-none" : "w-full max-w-5xl rounded-xl shadow-2xl border border-white/10"
@@ -264,7 +268,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
           className="absolute top-0 left-0 z-[100] pointer-events-none"
         >
           <svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ filter: 'drop-shadow(0px 3px 5px rgba(0,0,0,0.4))' }}>
-            <path d="M5.5 32.5L1 1.5L22.5 22.5H13L5.5 32.5Z" fill="black" stroke="white" strokeWidth="2" strokeLinejoin="round"/>
+            <path d="M5.5 32.5L1 1.5L22.5 22.5H13L5.5 32.5Z" fill="black" stroke="white" strokeWidth="2" strokeLinejoin="round" />
           </svg>
         </motion.div>
       )}
@@ -418,33 +422,26 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
         <AnimatePresence>
           {isStreaming && (
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.85, y: 30 }}
-              transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="absolute bottom-6 right-6 w-[560px] h-[340px] rounded-[1.25rem] bg-[#1e1e1e] shadow-2xl border border-white/10 overflow-hidden flex flex-col z-50 ring-1 ring-black/50"
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              className="absolute bottom-32 right-10 w-[440px] h-[280px] rounded-2xl bg-black shadow-2xl border border-white/10 overflow-hidden flex flex-col z-50 ring-1 ring-black/50"
             >
-              <div className="w-full h-full relative cursor-grab active:cursor-grabbing">
-                <Image
-                  src="/app-bg.png"
-                  alt="Window Content"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 560px"
-                  className="object-cover opacity-80"
-                />
-
-                <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-[#1c1c1e]/85 backdrop-blur-xl rounded-full border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.5)] px-4 py-2.5 flex items-center gap-4 z-10 transition-all hover:bg-[#1c1c1e]/95 group">
-                  <div className="flex items-center gap-2 pr-3 border-r border-[#3a3a3e]">
-                    <div className="w-2.5 h-2.5 rounded-full border-2 border-[#86868b] ml-1" />
-                    <span className="text-white text-[13px] font-semibold tracking-wide">
-                      {selectedId}
+              <div className="flex-1 w-full relative cursor-grab active:cursor-grabbing">
+                {/* Header Toolbar matching image */}
+                <div className="absolute top-0 left-0 right-0 h-[52px] bg-black/90 backdrop-blur-xl flex items-center px-4 justify-between z-20 border-b border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-2.5 h-2.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+                    <span className="text-white text-[13px] font-bold tracking-tight">
+                      lufra — icon.png
                     </span>
-                    <div className="bg-[#2c2c2e] text-[#86868b] text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] ml-1 border border-white/5">
-                      58 fps
+                    <div className="bg-[#1c1c1e] text-white/70 text-[10px] font-bold px-2 py-1 rounded-[6px] border border-white/10 ml-1">
+                      55 fps
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3.5 text-[#86868b]">
+                  <div className="flex items-center gap-3.5 text-white/50">
                     <Settings
                       size={15}
                       className="cursor-pointer hover:text-white transition-colors"
@@ -461,7 +458,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
                       size={15}
                       className="cursor-pointer hover:text-white transition-colors"
                     />
-                    <div className="w-[1px] h-3 bg-[#3a3a3e]" />
+                    <div className="w-[1px] h-3.5 bg-white/10" />
                     <Ghost
                       size={15}
                       className="cursor-pointer hover:text-white transition-colors"
@@ -477,7 +474,17 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
                   </div>
                 </div>
 
-                <div className="absolute right-[-24px] bottom-[-24px] w-28 h-28 bg-[#151515]/90 backdrop-blur-md rounded-[2.5rem] border border-white/10 flex items-center justify-center text-white cursor-nwse-resize shadow-2xl z-20">
+                <div className="absolute inset-0 pt-[52px]">
+                  <Image
+                    src="/app-bg.png"
+                    alt="Window Content"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 440px"
+                    className="object-cover opacity-90"
+                  />
+                </div>
+
+                <div className="absolute right-[-24px] bottom-[-20px] w-28 h-28 bg-black/80 backdrop-blur-md rounded-[2.5rem] border border-white/10 flex items-center justify-center text-white cursor-nwse-resize shadow-2xl z-20">
                   <svg
                     width="44"
                     height="44"
@@ -487,7 +494,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="mt-[-16px] ml-[-16px]"
+                    className="mt-[-16px] ml-[-16px] opacity-40"
                   >
                     <path d="M15 3h6v6" />
                     <path d="M9 21H3v-6" />

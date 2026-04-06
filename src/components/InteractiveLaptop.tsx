@@ -7,7 +7,6 @@ import WindowSelectorDemo from "./WindowSelectorDemo";
 
 export function InteractiveLaptop(props: any) {
   const { nodes, materials } = useGLTF("/model/macbook.glb") as any;
-  const laptopRef = React.useRef<any>(null);
 
   // Entrance animation
   const [mounted, setMounted] = useState(false);
@@ -27,7 +26,7 @@ export function InteractiveLaptop(props: any) {
     <a.group {...props} position={entranceAnim.position as any} rotation={entranceAnim.rotation as any} dispose={null}>
 
       {/* Laptop Model */}
-      <mesh ref={laptopRef} geometry={nodes["PROD-34805_1"].geometry} material={materials.ASSET_MAT_MR} scale={0.11} />
+      <mesh geometry={nodes["PROD-34805_1"].geometry} material={materials.ASSET_MAT_MR} scale={0.11} />
 
       {/* Screen Anchor Group: Final tuned position */}
       <group position={[0, 1.30, -1.19]} rotation={[0, 0, 0]}>
@@ -35,11 +34,10 @@ export function InteractiveLaptop(props: any) {
         {/* Embedded UI with infinite loop simulation */}
         <Html
           transform
-          occlude={[laptopRef]}
           position={[0, 0, 0.01]}
           distanceFactor={1.2} // <-- Tăng tỷ lệ này lên để màn hình to ra (trước là 1.07)
           zIndexRange={[0, 0]}
-          className="flex justify-center items-center transition-opacity duration-300"
+          className="flex justify-center items-center"
         >
           <div
             style={{

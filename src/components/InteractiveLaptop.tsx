@@ -24,28 +24,32 @@ export function InteractiveLaptop(props: any) {
 
   return (
     <a.group {...props} position={entranceAnim.position as any} rotation={entranceAnim.rotation as any} dispose={null}>
+
       {/* Laptop Model */}
       <mesh geometry={nodes["PROD-34805_1"].geometry} material={materials.ASSET_MAT_MR} scale={0.11} />
 
-      {/* Screen Anchor Group */}
-      <group position={[0, 1.51, -1.02]} rotation={[0.08, 0, 0]}>
-        
-        {/* Base Screen Backdrop */}
-        <mesh position={[0, 0, 0]}>
-          <planeGeometry args={[screenWidth, screenHeight]} />
-          <meshBasicMaterial color="#000000" />
-        </mesh>
+      {/* Screen Anchor Group: Final tuned position */}
+      <group position={[0, 1.30, -1.19]} rotation={[0, 0, 0]}>
 
         {/* Embedded UI with infinite loop simulation */}
-        <Html 
-          transform 
-          position={[0, 0, 0.01]} 
-          distanceFactor={1.5}
+        <Html
+          transform
+          position={[0, 0, 0.01]}
+          distanceFactor={1.2} // <-- Tăng tỷ lệ này lên để màn hình to ra (trước là 1.07)
           zIndexRange={[0, 0]}
           className="flex justify-center items-center"
         >
-          <div className="w-[1024px] h-[660px] rounded-[24px] bg-[#1c1c1e] text-left transform-gpu shadow-2xl relative overflow-hidden">
-            <WindowSelectorDemo autoPlay={true} />
+          <div
+            style={{
+              width: 1024,
+              height: 660,
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+            }}
+          >
+            <div className="w-full h-full rounded-[14px] bg-[#1c1c1e] text-left transform-gpu relative overflow-hidden pointer-events-auto">
+              <WindowSelectorDemo autoPlay={true} />
+            </div>
           </div>
         </Html>
       </group>

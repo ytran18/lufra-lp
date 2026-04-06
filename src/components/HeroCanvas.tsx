@@ -8,11 +8,11 @@ import { InteractiveLaptop } from "./InteractiveLaptop";
 export default function HeroCanvas() {
   return (
     <div className="w-full h-full relative cursor-auto select-none">
-      <Canvas camera={{ position: [0, 0, 7], fov: 45 }} gl={{ antialias: true }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 45 }} gl={{ antialias: true, alpha: true }}>
         <Suspense fallback={null}>
           <Environment preset="city" />
           <ambientLight intensity={0.5} />
-          
+
           <InteractiveLaptop />
 
           <ContactShadows position={[0, -2.5, 0]} opacity={0.4} scale={10} blur={2} />

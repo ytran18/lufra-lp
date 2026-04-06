@@ -68,8 +68,8 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
         if (!mounted) break;
 
         // 2. Move to first item's play button
-        // Coordinates refined: x: 885 (right align minus padding), y: 255 (first item center)
-        setCursorPos({ x: 885, y: 255 });
+        // x: ~900 (right-aligned area), y: ~218 (first item center below header)
+        setCursorPos({ x: 960, y: 222 });
         await new Promise((r) => setTimeout(r, 1000));
         if (!mounted) break;
 
@@ -80,7 +80,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
 
         // 4. Click up + trigger action
         setCursorScale(1);
-        await new Promise((r) => setTimeout(r, 200)); // Small delay for click feel
+        await new Promise((r) => setTimeout(r, 200));
         setIsStreaming(true);
         setSelectedId("public");
         await new Promise((r) => setTimeout(r, 1000));
@@ -91,9 +91,9 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
         await new Promise((r) => setTimeout(r, 2000));
         if (!mounted) break;
 
-        // 6. Move back to stop button (item moves down due to "Selected Windows" header)
-        // Header + Margin adds ~80px of vertical space
-        setCursorPos({ x: 885, y: 335 });
+        // 6. Move back to stop button (item is now in the "Selected Windows" section)
+        // The "Selected Windows" header adds ~40px of space above the item
+        setCursorPos({ x: 960, y: 262 });
         await new Promise((r) => setTimeout(r, 1500));
         if (!mounted) break;
 

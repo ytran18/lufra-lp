@@ -429,6 +429,7 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
                   src="/app-bg.png"
                   alt="Window Content"
                   fill
+                  sizes="(max-width: 768px) 100vw, 560px"
                   className="object-cover opacity-80"
                 />
 

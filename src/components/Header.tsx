@@ -39,9 +39,9 @@ export default function Header() {
                 ease: "easeOut"
             }}
             className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out border-b
-                ${scrolled 
-                    ? "bg-white/80 backdrop-blur-xl py-3 border-black/5 shadow-sm" 
-                    : "bg-white/40 backdrop-blur-md py-6 border-transparent"
+                ${scrolled
+                    ? "bg-white/80 backdrop-blur-xl py-3 border-black/5 shadow-sm"
+                    : "bg-white/40 backdrop-blur-md py-3 border-transparent"
                 }`}
         >
             <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -52,6 +52,7 @@ export default function Header() {
                             src="/icon.png"
                             alt="Lufra Logo"
                             fill
+                            sizes="36px"
                             className="object-contain p-1"
                             priority
                         />

@@ -118,21 +118,9 @@ export default function Features() {
       style={{ height: `${(features.length + 1) * 100}vh`, position: "relative" }}
     >
       {/* Sticky viewport */}
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflow: "hidden",
-          background: "#fbfbfd",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-
+      <div className="sticky top-0 h-screen overflow-hidden bg-[#fbfbfd] flex items-center">
 
         {/* Counter */}
-
 
         {/* Animated slide */}
         <AnimatePresence mode="wait">
@@ -141,21 +129,14 @@ export default function Features() {
             initial="enter"
             animate="active"
             exit="exit"
-            style={{
-              width: "100%",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              alignItems: "center",
-              padding: "0 80px",
-            }}
+            className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center px-6 sm:px-10 md:px-20 gap-8 md:gap-0"
           >
             {/* Visual */}
             <motion.div
               variants={visualVariants}
-              style={{
-                padding: 20,
-                order: feature.reverse ? 2 : 1,
-              }}
+              className={`p-0 md:p-5 w-full max-w-[450px] md:max-w-none mx-auto order-1 ${
+                feature.reverse ? "md:order-2" : "md:order-1"
+              }`}
             >
               <MockupShell>{feature.mockup}</MockupShell>
             </motion.div>
@@ -163,64 +144,27 @@ export default function Features() {
             {/* Text */}
             <motion.div
               variants={textVariants}
-              style={{
-                order: feature.reverse ? 1 : 2,
-                padding: feature.reverse
-                  ? "40px 60px 40px 20px"
-                  : "40px 20px 40px 60px",
-              }}
+              className={`flex flex-col justify-center order-2 ${
+                feature.reverse
+                  ? "md:order-1 md:pr-16 md:pl-5"
+                  : "md:order-2 md:pl-16 md:pr-5"
+              }`}
             >
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "#6e6e73",
-                  display: "block",
-                  marginBottom: 14,
-                }}
-              >
+              <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#6e6e73] block mb-3 md:mb-[14px]">
                 {feature.tag}
               </span>
 
-              <h2
-                style={{
-                  fontSize: "clamp(32px, 4.5vw, 52px)",
-                  fontWeight: 600,
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.08,
-                  color: "#1d1d1f",
-                  marginBottom: 20,
-                  whiteSpace: "pre-line",
-                }}
-              >
+              <h2 className="text-[clamp(32px,8vw,52px)] md:text-[clamp(32px,4.5vw,52px)] leading-[1.08] font-semibold tracking-[-0.025em] text-[#1d1d1f] mb-4 md:mb-5 whitespace-pre-line">
                 {feature.title}
               </h2>
 
-              <p
-                style={{
-                  fontSize: 17,
-                  lineHeight: 1.65,
-                  color: "#6e6e73",
-                  maxWidth: 360,
-                }}
-              >
+              <p className="text-[15px] md:text-[17px] leading-[1.65] text-[#6e6e73] max-w-full md:max-w-[360px]">
                 {feature.description}
               </p>
 
               <a
                 href="#"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  marginTop: 28,
-                  fontSize: 15,
-                  fontWeight: 500,
-                  color: "#0066cc",
-                  textDecoration: "none",
-                }}
+                className="inline-flex items-center gap-[5px] mt-6 md:mt-7 text-[15px] font-medium text-[#0066cc] no-underline"
               >
                 Learn more <ArrowRight size={13} />
               </a>

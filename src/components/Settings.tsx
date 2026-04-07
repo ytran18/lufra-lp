@@ -352,7 +352,7 @@ export default function SettingsTabsDemo() {
               y: { type: "spring", stiffness: 120, damping: 25 },
               scale: { duration: 0.1 },
             }}
-            className="absolute top-0 left-0 z-[100] pointer-events-none hidden sm:block"
+            className="absolute top-0 left-0 z-50 pointer-events-none hidden sm:block"
             style={{ translateX: "-50%", translateY: "-50%" }}
           >
             <svg
@@ -373,7 +373,7 @@ export default function SettingsTabsDemo() {
           </motion.div>
 
           {/* Mac Window Bar */}
-          <div className="h-[44px] sm:h-[48px] rounded-t-[16px] sm:rounded-t-[24px] flex px-3 sm:px-4 items-center justify-between border-b border-black/40 bg-[#242426] backdrop-blur-md relative z-40 shrink-0">
+          <div className="h-[44px] sm:h-[48px] rounded-t-[16px] sm:rounded-t-[24px] flex px-3 sm:px-4 items-center justify-between border-b border-black/40 bg-[#242426] backdrop-blur-md relative z-20 shrink-0">
             <div className="flex items-center">
               <div className="flex gap-1.5 mr-3 ml-1">
                 <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#FF5F56] border border-black/20" />
@@ -405,7 +405,7 @@ export default function SettingsTabsDemo() {
           {/* Modal Body */}
           <div className="relative w-full bg-[#1c1c1e] flex flex-col rounded-b-[16px] sm:rounded-b-[24px] overflow-hidden">
             {/* Tabs */}
-            <div className="flex justify-start sm:justify-center items-center gap-1 sm:gap-2 py-3 sm:py-4 px-3 sm:px-4 overflow-x-auto no-scrollbar select-none z-40 relative border-b border-white/5 bg-[#1c1c1e] shrink-0">
+            <div className="flex justify-start sm:justify-center items-center gap-1 sm:gap-2 py-3 sm:py-4 px-3 sm:px-4 overflow-x-auto no-scrollbar select-none z-20 relative border-b border-white/5 bg-[#1c1c1e] shrink-0">
               <TabButton
                 icon={
                   <Video
@@ -471,7 +471,7 @@ export default function SettingsTabsDemo() {
                     className="w-full px-4 sm:px-8 py-4 sm:py-6 flex flex-col"
                   >
                     {/* Header */}
-                    <div className="flex flex-col xs:flex-row justify-between items-start xs:items-end mb-4 sm:mb-6 gap-3">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-4 sm:mb-6 gap-3">
                       <div>
                         <h2 className="text-[18px] sm:text-[24px] font-semibold text-white mb-0.5 tracking-tight">
                           Select Window
@@ -573,7 +573,7 @@ export default function SettingsTabsDemo() {
                             sm:w-[85%] sm:max-w-[420px]
                             h-[160px] sm:h-[260px]
                             rounded-[16px] sm:rounded-[20px]
-                            bg-black shadow-2xl border border-white/10 overflow-hidden flex flex-col z-50 ring-1 ring-black/50
+                            bg-black shadow-2xl border border-white/10 overflow-hidden flex flex-col z-30 ring-1 ring-black/50
                           "
                         >
                           {/* PiP Header */}

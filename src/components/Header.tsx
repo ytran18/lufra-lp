@@ -38,7 +38,7 @@ export default function Header() {
                 duration: 0.4,
                 ease: "easeOut"
             }}
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out border-b
+            className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ease-in-out border-b
                 ${scrolled
                     ? "bg-white/80 backdrop-blur-xl py-3 border-black/5 shadow-sm"
                     : "bg-white/40 backdrop-blur-md py-3 border-transparent"

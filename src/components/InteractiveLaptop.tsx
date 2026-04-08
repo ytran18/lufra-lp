@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useGLTF, useTexture, Html } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import { useSpring, a } from "@react-spring/three";
 import WindowSelectorDemo from "./WindowSelectorDemo";
 
@@ -31,28 +32,43 @@ export function InteractiveLaptop(props: any) {
       {/* Screen Anchor Group: Final tuned position */}
       <group position={[0, 1.30, -1.19]} rotation={[0, 0, 0]}>
 
-        {/* Embedded UI with infinite loop simulation */}
+        {/* Embedded UI — Html with stable containment to prevent resize jitter */}
         <Html
           transform
           occlude
-          position={[0, 0, 0.02]} // Slightly more offset to prevent z-fighting
+          position={[0, 0, 0.02]}
           distanceFactor={1.2}
-          zIndexRange={[1, 1]} // Ensure it's above the mesh but still occludable
+          zIndexRange={[1, 1]}
+          // prepend keeps the portal out of the canvas stacking context
+          prepend
           className="flex justify-center items-center pointer-events-none"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
+            // Promote to own compositing layer to avoid layout thrashing on resize
+            willChange: "transform",
           }}
         >
+          {/*
+           * The inner div must have FIXED pixel dimensions — never % or vw.
+           * When Canvas resizes, Html recomputes scale, but a stable px size
+           * means the content doesn't reflow, eliminating the visual stutter.
+           */}
           <div
             style={{
               width: 1024,
               height: 660,
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
+              willChange: "transform",
+              // contain: layout prevents the 1024px div from affecting ancestor layout
+              contain: "layout",
             }}
           >
-            <div className="w-full h-full rounded-[14px] bg-[#1c1c1e] text-left transform-gpu relative overflow-hidden pointer-events-auto">
+            <div
+              className="w-full h-full rounded-[14px] bg-[#1c1c1e] text-left relative overflow-hidden pointer-events-auto"
+              style={{ transform: "translateZ(0)" }}
+            >
               <WindowSelectorDemo autoPlay={true} />
             </div>
           </div>

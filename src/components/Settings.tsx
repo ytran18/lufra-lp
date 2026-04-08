@@ -328,7 +328,10 @@ export default function SettingsTabsDemo() {
   }, [activeTab, moveTo, simulateClick]);
 
   return (
-    <section className="relative w-full bg-[#fbfbfd] py-20 sm:py-32 flex flex-col items-center justify-center overflow-hidden">
+    <section
+      id="settings"
+      className="relative w-full bg-[#fbfbfd] py-20 sm:py-32 flex flex-col items-center justify-center overflow-hidden"
+    >
       {/* ── Intro Header ─────────────────────────────────────────────────── */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-10 flex flex-col items-center text-center mb-12 md:mb-20">
         <motion.div
@@ -360,8 +363,9 @@ export default function SettingsTabsDemo() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* ── Animated Cursor (desktop only) ─────────────────────────── */}
+          {/* ── Animated Cursor (desktop only, decorative) ─────────────────────────── */}
           <motion.div
+            aria-hidden="true"
             animate={{ x: cursorPos.x, y: cursorPos.y, scale: cursorScale }}
             transition={{
               x: { type: "spring", stiffness: 140, damping: 22 },
@@ -422,7 +426,11 @@ export default function SettingsTabsDemo() {
           <div className="relative w-full bg-[#1c1c1e] flex flex-col rounded-b-[16px] sm:rounded-b-[24px] overflow-hidden flex-1">
 
             {/* ── Tab Bar ───────────────────────────────────────────── */}
-            <div className="flex justify-start sm:justify-center items-center gap-0.5 sm:gap-1 py-2.5 sm:py-3.5 px-2 sm:px-4 overflow-x-auto scrollbar-hide select-none z-20 relative border-b border-white/5 bg-[#1c1c1e] shrink-0">
+            <div
+              role="tablist"
+              aria-label="Settings tabs"
+              className="flex justify-start sm:justify-center items-center gap-0.5 sm:gap-1 py-2.5 sm:py-3.5 px-2 sm:px-4 overflow-x-auto scrollbar-hide select-none z-20 relative border-b border-white/5 bg-[#1c1c1e] shrink-0"
+            >
               <TabButton
                 icon={<Video size={17} strokeWidth={activeTab === "Capture" ? 2.5 : 2} className="mb-0.5" />}
                 label="Capture"
@@ -441,7 +449,7 @@ export default function SettingsTabsDemo() {
                 active={activeTab === "Shortcuts"}
                 onClick={() => setActiveTab("Shortcuts")}
               />
-              <div className="opacity-35 pointer-events-none">
+              <div className="opacity-35 pointer-events-none" aria-hidden="true">
                 <TabButton
                   icon={<Info size={17} strokeWidth={2} className="mb-0.5" />}
                   label="About"
@@ -852,15 +860,18 @@ function TabButton({
 }) {
   return (
     <button
+      role="tab"
+      aria-selected={active}
       onClick={onClick}
       className={classNames(
         "flex flex-col items-center justify-center w-[60px] sm:w-[74px] h-[52px] sm:h-[60px] rounded-xl sm:rounded-2xl transition-colors select-none",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A84FF] focus-visible:ring-offset-1 focus-visible:ring-offset-[#1c1c1e]",
         active
           ? "bg-[#333336] text-[#0A84FF] shadow-[0_1px_2px_rgba(0,0,0,0.2)]"
           : "text-[#86868b] hover:text-white hover:bg-white/4"
       )}
     >
-      {icon}
+      <span aria-hidden="true">{icon}</span>
       <span
         className={classNames(
           "text-[10px] sm:text-[11px] font-medium tracking-wide mt-0.5",

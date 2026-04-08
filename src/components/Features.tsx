@@ -103,7 +103,8 @@ export default function Features() {
       const scrolled = -top;
       const progress = Math.max(0, Math.min(1, scrolled / totalScroll));
       const idx = Math.min(features.length - 1, Math.floor(progress * features.length));
-      setActive(idx);
+      // Guard: only update state when the active feature actually changes
+      setActive((prev) => (prev === idx ? prev : idx));
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -114,6 +115,7 @@ export default function Features() {
 
   return (
     <div
+      id="features"
       ref={wrapRef}
       style={{ height: `${(features.length + 1) * 100}vh`, position: "relative" }}
     >

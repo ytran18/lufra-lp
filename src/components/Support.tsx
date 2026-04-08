@@ -16,11 +16,11 @@ export default function Support() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitting:", { email, message, type: activeType });
+    // TODO: wire up to your email/form API
   };
 
   return (
-    <section className="w-full bg-[#fbfbfd] py-24 md:py-32 overflow-hidden">
+    <section id="support" className="w-full bg-[#fbfbfd] py-24 md:py-32 overflow-hidden">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
           
@@ -48,7 +48,7 @@ export default function Support() {
                 className="text-[#1d1d1f] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
               >
                 support@lufra.app
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                   <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </a>
@@ -57,7 +57,7 @@ export default function Support() {
                 className="text-[#1d1d1f] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
               >
                 Browse Documentation
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
                   <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </a>
@@ -81,6 +81,7 @@ export default function Support() {
                     key={type.id}
                     type="button"
                     onClick={() => setActiveType(type.id)}
+                    aria-pressed={activeType === type.id}
                     className={`relative flex-1 py-1.5 text-sm font-medium transition-colors z-10 ${
                       activeType === type.id ? "text-[#1d1d1f]" : "text-[#86868b]"
                     }`}

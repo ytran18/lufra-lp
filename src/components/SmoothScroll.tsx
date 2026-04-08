@@ -15,24 +15,21 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       smoothWheel: true,
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
+    // Use ONLY the GSAP ticker — this is the official Lenis+GSAP integration.
+    // Avoid the manual requestAnimationFrame loop to prevent double-ticking lenis
+    // (which would advance scroll physics twice per frame → jitter + wasted CPU).
     lenis.on('scroll', ScrollTrigger.update);
 
-    gsap.ticker.add((time) => {
+    const gsapTickerHandler = (time: number) => {
       lenis.raf(time * 1000);
-    });
+    };
 
+    gsap.ticker.add(gsapTickerHandler);
     gsap.ticker.lagSmoothing(0);
 
     return () => {
       lenis.destroy();
-      gsap.ticker.remove(raf);
+      gsap.ticker.remove(gsapTickerHandler);
     };
   }, []);
 

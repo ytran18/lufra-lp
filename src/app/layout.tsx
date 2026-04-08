@@ -4,12 +4,32 @@ import "./globals.css";
 import Header from "@/components/Header";
 import SmoothScroll from "@/components/SmoothScroll";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+// Limit to only actually-used weights to reduce font payload
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+  preload: true,
+});
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-outfit",
+  display: "swap",
+  preload: false, // secondary font, don't block render
+});
 
 export const metadata: Metadata = {
-  title: "Lufra - Premium Animation Demo",
-  description: "Next.js, Three.js, GSAP, Lenis, and Framer Motion Showcase",
+  title: "Lufra — Picture-in-Picture for macOS",
+  description:
+    "Float any app above everything else. Resize freely, reposition effortlessly. Experience PiP with 60fps, zero latency, and native macOS design.",
+  keywords: ["Picture in Picture", "macOS", "PiP", "productivity", "multitasking"],
+  openGraph: {
+    title: "Lufra — Picture-in-Picture for macOS",
+    description: "Float any app above everything else with 60fps, zero latency.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

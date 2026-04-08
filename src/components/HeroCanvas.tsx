@@ -8,7 +8,14 @@ import { InteractiveLaptop } from "./InteractiveLaptop";
 export default function HeroCanvas() {
   return (
     <div className="w-full h-full relative cursor-auto select-none">
-      <Canvas camera={{ position: [0, 0, 10], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas
+        camera={{ position: [0, 0, 10], fov: 45 }}
+        gl={{ antialias: true, alpha: true }}
+        // Cap DPR to prevent expensive re-renders on high-DPI screens during resize
+        dpr={[1, 1.5]}
+        // Debounce canvas resize so it doesn't jitter on every pixel change
+        resize={{ debounce: 200 }}
+      >
         <Suspense fallback={null}>
           <Environment preset="city" />
           <ambientLight intensity={0.5} />

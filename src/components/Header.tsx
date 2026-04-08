@@ -79,6 +79,7 @@ export default function Header() {
                 {/* CTA & Mobile Toggle */}
                 <div className="flex items-center gap-5">
                     <motion.button
+                        type="button"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className="hidden sm:inline-flex bg-[#1d1d1f] text-white px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-xl shadow-black/5 hover:shadow-black/10 hover:bg-black"

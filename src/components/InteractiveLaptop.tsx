@@ -25,54 +25,58 @@ export function InteractiveLaptop(props: any) {
 
   return (
     <a.group {...props} position={entranceAnim.position as any} rotation={entranceAnim.rotation as any} dispose={null}>
+      {/* 
+       * Unified Scale Group:
+       * By scaling the parent rather than individual meshes, the Html component 
+       * and the 3D geometry share the same coordinate space, preventing drift.
+       */}
+      <group scale={0.11}>
+        {/* Laptop Model */}
+        <mesh geometry={nodes["PROD-34805_1"].geometry} material={materials.ASSET_MAT_MR} />
 
-      {/* Laptop Model */}
-      <mesh geometry={nodes["PROD-34805_1"].geometry} material={materials.ASSET_MAT_MR} scale={0.11} />
-
-      {/* Screen Anchor Group: Final tuned position */}
-      <group position={[0, 1.30, -1.19]} rotation={[0, 0, 0]}>
-
-        {/* Embedded UI — Html with stable containment to prevent resize jitter */}
-        <Html
-          transform
-          occlude
-          position={[0, 0, 0.02]}
-          distanceFactor={1.2}
-          zIndexRange={[1, 1]}
-          // prepend keeps the portal out of the canvas stacking context
-          prepend
-          className="flex justify-center items-center pointer-events-none"
-          style={{
-            backfaceVisibility: "hidden",
-            WebkitBackfaceVisibility: "hidden",
-            // Promote to own compositing layer to avoid layout thrashing on resize
-            willChange: "transform",
-          }}
-        >
-          {/*
-           * The inner div must have FIXED pixel dimensions — never % or vw.
-           * When Canvas resizes, Html recomputes scale, but a stable px size
-           * means the content doesn't reflow, eliminating the visual stutter.
-           */}
-          <div
+        {/* 
+         * Screen Anchor Group: Positioned in model units (unscaled units / 0.11)
+         * Adjusted to [0, 11.82, -10.82] to match previous world-space position.
+         */}
+        <group position={[0, 11.82, -10.82]} rotation={[0, 0, 0]}>
+          {/* Embedded UI */}
+          <Html
+            transform
+            occlude
+            position={[0, 0, 0.2]} // Slightly more Z-offset to prevent z-fighting at lower DPR
+            distanceFactor={11} // Calibrated for the new shared scale
+            zIndexRange={[1, 1]}
+            prepend
+            className="flex justify-center items-center"
             style={{
-              width: 1024,
-              height: 660,
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
               willChange: "transform",
-              // contain: layout prevents the 1024px div from affecting ancestor layout
-              contain: "layout",
+              transformStyle: "preserve-3d",
+              // Critical: Allow vertical scrolling of the page even when cursor is on the laptop
+              touchAction: "pan-y",
             }}
           >
             <div
-              className="w-full h-full rounded-[14px] bg-[#1c1c1e] text-left relative overflow-hidden pointer-events-auto"
-              style={{ transform: "translateZ(0)" }}
+              style={{
+                width: 1024,
+                height: 660,
+                backfaceVisibility: "hidden",
+                WebkitBackfaceVisibility: "hidden",
+                willChange: "transform",
+                contain: "layout",
+                overscrollBehavior: "contain",
+              }}
             >
-              <WindowSelectorDemo autoPlay={true} />
+              <div
+                className="w-full h-full rounded-[14px] bg-[#1c1c1e] text-left relative overflow-hidden"
+                style={{ transform: "translateZ(0)" }}
+              >
+                <WindowSelectorDemo autoPlay={true} />
+              </div>
             </div>
-          </div>
-        </Html>
+          </Html>
+        </group>
       </group>
     </a.group>
   );

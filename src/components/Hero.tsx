@@ -42,11 +42,10 @@ export default function Hero() {
 
       {/*
        * Right Column: R3F Canvas
-       * — On mobile: 60vw tall box with aspect-ratio proportions
-       * — On lg+: full 100vh column
-       * No overflow hacks. The Canvas fills its container via w-full h-full.
+       * Unified height logic with min-height safety to prevent the 3D scene 
+       * from being compressed on short/mobile viewports.
        */}
-      <div className="w-full order-1 lg:order-2 h-[55vh] sm:h-[65vh] lg:h-screen relative">
+      <div className="w-full order-1 lg:order-2 h-[60vh] sm:h-[70vh] lg:h-screen min-h-[500px] lg:min-h-0 relative">
         <HeroCanvas />
       </div>
 

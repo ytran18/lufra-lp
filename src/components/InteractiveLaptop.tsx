@@ -76,7 +76,7 @@ export function InteractiveLaptop(props: any) {
            * Use real 3D geometry (a plane) instead of DOM overlay (`Html`).
            * This removes drift caused by browser zoom/DPR/subpixel rounding.
            */}
-          <mesh position={[0, 0, 0.24]} renderOrder={10}>
+          <mesh position={[0, 0, 0.09]} renderOrder={10}>
             <planeGeometry args={[screenWidth, screenHeight]} />
             <meshBasicMaterial
               map={screenTexture}

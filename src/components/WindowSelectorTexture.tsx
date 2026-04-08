@@ -79,7 +79,11 @@ function drawRoundedRect(
   h: number,
   r: number
 ) {
-  const rr = Math.min(r, w / 2, h / 2);
+  // Guard against negative/invalid sizes (can happen when a layout region collapses).
+  const ww = Number.isFinite(w) ? w : 0;
+  const hh = Number.isFinite(h) ? h : 0;
+  if (ww <= 0 || hh <= 0) return;
+  const rr = Math.max(0, Math.min(Math.max(0, r), ww / 2, hh / 2));
   ctx.beginPath();
   ctx.moveTo(x + rr, y);
   ctx.arcTo(x + w, y, x + w, y + h, rr);
@@ -114,6 +118,79 @@ function drawCursor(ctx: CanvasRenderingContext2D, x: number, y: number, scale: 
   ctx.lineJoin = "round";
   ctx.stroke();
   ctx.restore();
+}
+
+function drawFavicon(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  variant: "globe" | "doc"
+) {
+  // Neutral "browser-y" favicons (no brand / no logo).
+  drawRoundedRect(ctx, x, y, size, size, Math.max(6, Math.round(size * 0.28)));
+  ctx.fillStyle = "#141417";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  if (variant === "doc") {
+    // Document with folded corner
+    const pad = Math.round(size * 0.22);
+    const w = size - pad * 2;
+    const h = size - pad * 2;
+    const dx = x + pad;
+    const dy = y + pad;
+    drawRoundedRect(ctx, dx, dy, w, h, 6);
+    ctx.fillStyle = "rgba(255,255,255,0.14)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(dx + w * 0.62, dy);
+    ctx.lineTo(dx + w, dy);
+    ctx.lineTo(dx + w, dy + h * 0.38);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(255,255,255,0.22)";
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(dx + 8, dy + h * 0.48);
+    ctx.lineTo(dx + w - 8, dy + h * 0.48);
+    ctx.moveTo(dx + 8, dy + h * 0.66);
+    ctx.lineTo(dx + w - 16, dy + h * 0.66);
+    ctx.stroke();
+    return;
+  }
+
+  // Globe
+  const cx = x + size / 2;
+  const cy = y + size / 2;
+  const r = size * 0.32;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = "rgba(78,182,255,0.18)";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(78,182,255,0.45)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  ctx.strokeStyle = "rgba(255,255,255,0.16)";
+  ctx.lineWidth = 1.5;
+  // meridians
+  ctx.beginPath();
+  ctx.ellipse(cx, cy, r * 0.55, r, 0, 0, Math.PI * 2);
+  ctx.ellipse(cx, cy, r, r * 0.55, 0, 0, Math.PI * 2);
+  ctx.stroke();
+  // equator
+  ctx.beginPath();
+  ctx.moveTo(cx - r, cy);
+  ctx.lineTo(cx + r, cy);
+  ctx.stroke();
 }
 
 function useLoadedImage(src: string) {
@@ -162,7 +239,8 @@ export function useWindowSelectorTexture({
     return t;
   }, [canvas]);
 
-  const appBg = useLoadedImage("/app-bg.png");
+  // Intentionally avoid drawing any real screenshot assets that may include logos/branding.
+  // We'll render a neutral "webpage" mock directly on canvas for the PiP preview.
 
   const simRef = useRef<SimState | null>(null);
 
@@ -246,7 +324,10 @@ export function useWindowSelectorTexture({
       const segX = tabsX + i * (segW + gap);
       const isActive = state.activeTab === tab.key;
       if (isActive) {
-        drawRoundedRect(ctx, segX, tabsY, segW, segH, 14);
+        // Inset pill so it feels optically centered/balanced.
+        const insetX = 4;
+        const insetY = 6;
+        drawRoundedRect(ctx, segX + insetX, tabsY + insetY, segW - insetX * 2, segH - insetY * 2, 14);
         ctx.fillStyle = "#3a3a3c";
         ctx.fill();
         ctx.strokeStyle = "rgba(255,255,255,0.10)";
@@ -256,8 +337,11 @@ export function useWindowSelectorTexture({
 
       ctx.fillStyle = isActive ? "#fff" : "rgba(134,134,139,1)";
       ctx.font = `${isActive ? 800 : 700} 10px ui-sans-serif, system-ui, -apple-system`;
-      const tm = ctx.measureText(tab.label);
-      ctx.fillText(tab.label, segX + segW / 2 - tm.width / 2, tabsY + 34);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(tab.label, segX + segW / 2, tabsY + segH / 2 + 1);
+      ctx.textAlign = "start";
+      ctx.textBaseline = "alphabetic";
     });
 
     // Content area
@@ -315,9 +399,9 @@ export function useWindowSelectorTexture({
     const streaming = state.streaming;
 
     const rows = [
-      { id: "public", title: "public", sub: "Finder", res: "920x464" },
-      { id: "lufra", title: "lufra — icon.png", sub: "Antigravity", res: "" },
-      { id: "lufra-lp", title: "lufra-lp — icon.png", sub: "Antigravity", res: "1710x1073" },
+      { id: "public", title: "public — Live preview", sub: "Google Chrome", res: "920×464" },
+      { id: "lufra", title: "Lufra Dashboard — Stream", sub: "Google Chrome", res: "1440×900" },
+      { id: "lufra-lp", title: "lufra-lp — localhost:3000", sub: "Google Chrome", res: "1710×1073" },
     ] as const;
 
     const drawListContainer = (x: number, y: number, w: number, h: number) => {
@@ -343,17 +427,10 @@ export function useWindowSelectorTexture({
         ctx.fillRect(listX, y, listW, rowH);
       }
 
-      // icon
-      drawRoundedRect(ctx, listX + 16, y + 14, 36, 36, 10);
-      ctx.fillStyle = "#1e1e1e";
-      ctx.fill();
-      if (r.id === "public") {
-        const g = ctx.createLinearGradient(listX + 16, y + 14, listX + 16, y + 50);
-        g.addColorStop(0, "#4eb6ff");
-        g.addColorStop(1, "#007aff");
-        ctx.fillStyle = g;
-        ctx.fillRect(listX + 16, y + 14, 36, 36);
-      }
+      // favicon (neutral, browser-like; no app logo)
+      const favX = listX + 16;
+      const favY = y + 14;
+      drawFavicon(ctx, favX, favY, 36, r.id === "public" ? "globe" : "doc");
 
       // text
       ctx.fillStyle = "#fff";
@@ -490,13 +567,27 @@ export function useWindowSelectorTexture({
       ctx.strokeStyle = "rgba(52,199,89,0.15)";
       ctx.stroke();
 
+      const label = "1 ACTIVE";
+      ctx.font = "800 10px ui-sans-serif, system-ui, -apple-system";
+      const tm = ctx.measureText(label);
+      const dotR = 3;
+      const dotD = dotR * 2;
+      const dotGap = 8;
+      const groupW = dotD + dotGap + tm.width;
+      const gx = px + (pillW2 - groupW) / 2;
+      const cy = py + pillH2 / 2;
+
       ctx.beginPath();
-      ctx.arc(px + 14, py + 12, 3, 0, Math.PI * 2);
+      ctx.arc(gx + dotR, cy, dotR, 0, Math.PI * 2);
       ctx.fillStyle = "#34C759";
       ctx.fill();
+
       ctx.fillStyle = "#34C759";
-      ctx.font = "800 10px ui-sans-serif, system-ui, -apple-system";
-      ctx.fillText("1 ACTIVE", px + 24, py + 16);
+      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      ctx.fillText(label, gx + dotD + dotGap, cy + 0.5);
+      ctx.textAlign = "start";
+      ctx.textBaseline = "alphabetic";
     }
 
     // PiP window
@@ -517,37 +608,203 @@ export function useWindowSelectorTexture({
       ctx.strokeStyle = "rgba(255,255,255,0.1)";
       ctx.stroke();
 
-      // pip header
-      ctx.fillStyle = "rgba(0,0,0,0.9)";
-      ctx.fillRect(pipX, pipY, pipW, 52);
-      ctx.strokeStyle = "rgba(255,255,255,0.05)";
+      // Browser-like chrome (tab + address bar). No logos.
+      const chromeH = 68;
+      ctx.fillStyle = "rgba(8,8,10,0.92)";
+      ctx.fillRect(pipX, pipY, pipW, chromeH);
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
       ctx.beginPath();
-      ctx.moveTo(pipX, pipY + 52.5);
-      ctx.lineTo(pipX + pipW, pipY + 52.5);
+      ctx.moveTo(pipX, pipY + chromeH + 0.5);
+      ctx.lineTo(pipX + pipW, pipY + chromeH + 0.5);
       ctx.stroke();
 
-      ctx.fillStyle = "#fff";
-      ctx.font = "800 13px ui-sans-serif, system-ui, -apple-system";
-      ctx.fillText("lufra — icon.png", pipX + 30, pipY + 32);
-      // fps badge
-      drawRoundedRect(ctx, pipX + 170, pipY + 16, 52, 20, 6);
-      ctx.fillStyle = "#1c1c1e";
+      // Tab pill
+      const tabX = pipX + 18;
+      const tabY = pipY + 12;
+      const tabW = 210;
+      const tabH = 22;
+      drawRoundedRect(ctx, tabX, tabY, tabW, tabH, 10);
+      ctx.fillStyle = "rgba(255,255,255,0.08)";
       ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.1)";
+      ctx.strokeStyle = "rgba(255,255,255,0.10)";
+      ctx.stroke();
+      drawFavicon(ctx, tabX + 6, tabY + 4, 14, "globe");
+      ctx.fillStyle = "rgba(255,255,255,0.85)";
+      ctx.font = "750 11px ui-sans-serif, system-ui, -apple-system";
+      ctx.fillText("public — Live preview", tabX + 26, tabY + 15);
+
+      // Address bar
+      const addrX = pipX + 18;
+      const addrY = pipY + 40;
+      const addrW = pipW - 18 * 2 - 56;
+      const addrH = 22;
+      drawRoundedRect(ctx, addrX, addrY, addrW, addrH, 11);
+      ctx.fillStyle = "rgba(255,255,255,0.06)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.10)";
+      ctx.stroke();
+      // lock icon
+      ctx.fillStyle = "rgba(52,199,89,0.9)";
+      ctx.beginPath();
+      ctx.roundRect(addrX + 10, addrY + 8, 10, 10, 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.78)";
+      ctx.font = "700 10px ui-sans-serif, system-ui, -apple-system";
+      ctx.fillText("https://public.lufra.app/stream", addrX + 28, addrY + 15);
+
+      // Menu dots
+      const mdx = pipX + pipW - 28;
+      const mdy = addrY + 11;
+      ctx.fillStyle = "rgba(255,255,255,0.55)";
+      for (let i = -1; i <= 1; i++) {
+        ctx.beginPath();
+        ctx.arc(mdx, mdy + i * 6, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // fps badge (keep, but move to the right side)
+      const fpsW = 52;
+      const fpsH = 18;
+      const fpsX = pipX + pipW - 18 - 56 - fpsW;
+      const fpsY = pipY + 13;
+      drawRoundedRect(ctx, fpsX, fpsY, fpsW, fpsH, 6);
+      ctx.fillStyle = "rgba(0,0,0,0.35)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.10)";
       ctx.stroke();
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.font = "800 10px ui-sans-serif, system-ui, -apple-system";
-      ctx.fillText("55 fps", pipX + 182, pipY + 31);
+      ctx.fillText("55 fps", fpsX + 12, fpsY + 12);
 
-      // pip content image
-      if (appBg) {
+      // PiP page content (neutral browser page mock; no logos)
+      const contentX = pipX;
+      const contentY = pipY + chromeH;
+      const contentW = pipW;
+      const contentH = pipH - chromeH;
+
+      // background gradient
+      const bg = ctx.createLinearGradient(contentX, contentY, contentX, contentY + contentH);
+      bg.addColorStop(0, "#0b0b0d");
+      bg.addColorStop(1, "#111114");
+      ctx.fillStyle = bg;
+      ctx.fillRect(contentX, contentY, contentW, contentH);
+
+      // subtle hero glow
+      ctx.save();
+      ctx.globalAlpha = 0.9;
+      const glow = ctx.createRadialGradient(
+        contentX + contentW * 0.35,
+        contentY + contentH * 0.25,
+        10,
+        contentX + contentW * 0.35,
+        contentY + contentH * 0.25,
+        contentW * 0.7
+      );
+      glow.addColorStop(0, "rgba(78,182,255,0.18)");
+      glow.addColorStop(1, "rgba(78,182,255,0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(contentX, contentY, contentW, contentH);
+      ctx.restore();
+
+      // top page nav
+      const navH = 40;
+      ctx.fillStyle = "rgba(255,255,255,0.03)";
+      ctx.fillRect(contentX, contentY, contentW, navH);
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.beginPath();
+      ctx.moveTo(contentX, contentY + navH + 0.5);
+      ctx.lineTo(contentX + contentW, contentY + navH + 0.5);
+      ctx.stroke();
+
+      // left nav items
+      ctx.fillStyle = "rgba(255,255,255,0.70)";
+      ctx.font = "800 10px ui-sans-serif, system-ui, -apple-system";
+      ctx.fillText("Dashboard", contentX + 16, contentY + 24);
+      ctx.fillStyle = "rgba(255,255,255,0.45)";
+      ctx.font = "700 10px ui-sans-serif, system-ui, -apple-system";
+      ctx.fillText("Streams", contentX + 88, contentY + 24);
+      ctx.fillText("Settings", contentX + 142, contentY + 24);
+
+      // right pill button
+      const ctaW = 78;
+      const ctaH = 18;
+      const ctaX = contentX + contentW - 16 - ctaW;
+      const ctaY = contentY + 11;
+      drawRoundedRect(ctx, ctaX, ctaY, ctaW, ctaH, 999);
+      ctx.fillStyle = "rgba(52,199,89,0.20)";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(52,199,89,0.35)";
+      ctx.stroke();
+      ctx.fillStyle = "rgba(170,255,205,0.9)";
+      ctx.font = "800 9px ui-sans-serif, system-ui, -apple-system";
+      ctx.fillText("LIVE", ctaX + 28, ctaY + 12);
+      ctx.beginPath();
+      ctx.arc(ctaX + 18, ctaY + 9, 3, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(52,199,89,0.95)";
+      ctx.fill();
+
+      // main content cards
+      const gridX = contentX + 16;
+      const gridY = contentY + navH + 14;
+      const cardGap = 10;
+      const cardW = (contentW - 16 * 2 - cardGap) / 2;
+      const cardH = 70;
+
+      const drawCard = (x: number, y: number, title: string, value: string, accent: string) => {
+        drawRoundedRect(ctx, x, y, cardW, cardH, 14);
         ctx.save();
-        ctx.globalAlpha = 0.9;
-        ctx.drawImage(appBg, pipX, pipY + 52, pipW, pipH - 52);
+        ctx.shadowColor = "rgba(0,0,0,0.55)";
+        ctx.shadowBlur = 18;
+        ctx.shadowOffsetY = 10;
+        ctx.fillStyle = "rgba(255,255,255,0.04)";
+        ctx.fill();
         ctx.restore();
-      } else {
-        ctx.fillStyle = "#111";
-        ctx.fillRect(pipX, pipY + 52, pipW, pipH - 52);
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(255,255,255,0.55)";
+        ctx.font = "750 9px ui-sans-serif, system-ui, -apple-system";
+        ctx.fillText(title.toUpperCase(), x + 12, y + 22);
+
+        ctx.fillStyle = "rgba(255,255,255,0.90)";
+        ctx.font = "900 16px ui-sans-serif, system-ui, -apple-system";
+        ctx.fillText(value, x + 12, y + 46);
+
+        ctx.fillStyle = accent;
+        ctx.beginPath();
+        ctx.arc(x + cardW - 16, y + 18, 4, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      drawCard(gridX, gridY, "Active viewers", "1,248", "rgba(78,182,255,0.95)");
+      drawCard(gridX + cardW + cardGap, gridY, "Bitrate", "6.2 Mbps", "rgba(52,199,89,0.95)");
+      drawCard(gridX, gridY + cardH + cardGap, "Latency", "182 ms", "rgba(255,204,0,0.95)");
+      drawCard(gridX + cardW + cardGap, gridY + cardH + cardGap, "Dropped frames", "0.3%", "rgba(255,59,48,0.95)");
+
+      // small chart placeholder
+      const chartX = gridX;
+      const chartY = gridY + (cardH + cardGap) * 2 + 6;
+      const chartW = contentW - 32;
+      const chartH = contentH - (chartY - contentY) - 14;
+      // Only draw if there's enough room; otherwise avoid negative radii/layout.
+      if (chartH >= 46) {
+        drawRoundedRect(ctx, chartX, chartY, chartW, chartH, 14);
+        ctx.fillStyle = "rgba(255,255,255,0.03)";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(78,182,255,0.35)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const steps = 10;
+        for (let i = 0; i <= steps; i++) {
+          const xx = chartX + 12 + (i / steps) * (chartW - 24);
+          const yy = chartY + chartH - 12 - (Math.sin(i * 0.75) * 0.35 + 0.55) * (chartH - 24);
+          if (i === 0) ctx.moveTo(xx, yy);
+          else ctx.lineTo(xx, yy);
+        }
+        ctx.stroke();
+        ctx.lineWidth = 1;
       }
 
       // resize handle

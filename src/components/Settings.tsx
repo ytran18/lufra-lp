@@ -449,7 +449,9 @@ export default function SettingsTabsDemo() {
                 active={activeTab === "Shortcuts"}
                 onClick={() => setActiveTab("Shortcuts")}
               />
-              <div className="opacity-35 pointer-events-none" aria-hidden="true">
+              {/* inert makes all descendants non-focusable and non-interactive
+                  at the browser level — stronger than aria-hidden alone */}
+              <div className="opacity-35" inert aria-hidden="true">
                 <TabButton
                   icon={<Info size={17} strokeWidth={2} className="mb-0.5" />}
                   label="About"
@@ -492,8 +494,11 @@ export default function SettingsTabsDemo() {
                             <GridIcon size={13} />
                           </div>
                         </div>
-                        <button className="text-[#86868b] hover:text-white transition-colors">
-                          <RefreshCw size={13} />
+                        <button
+                          aria-label="Refresh window list"
+                          className="text-[#86868b] hover:text-white transition-colors"
+                        >
+                          <RefreshCw size={13} aria-hidden="true" />
                         </button>
                       </div>
                     </div>

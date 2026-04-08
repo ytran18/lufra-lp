@@ -341,16 +341,16 @@ export default function WindowSelectorDemo({ autoPlay = false }: { autoPlay?: bo
 
           <div className="flex items-center gap-5">
             <div className="flex bg-[#2c2c2e] rounded-[10px] p-[3px] border border-white/5 shadow-sm">
-              <button className="w-9 h-7 bg-[#4a4a4e] rounded-[7px] shadow-[0_1px_4px_rgba(0,0,0,0.3)] flex items-center justify-center text-white">
-                <LayoutList size={16} strokeWidth={2} />
+              <button aria-label="List view" className="w-9 h-7 bg-[#4a4a4e] rounded-[7px] shadow-[0_1px_4px_rgba(0,0,0,0.3)] flex items-center justify-center text-white">
+                <LayoutList size={16} strokeWidth={2} aria-hidden="true" />
               </button>
-              <button className="w-9 h-7 flex items-center justify-center text-[#86868b] hover:text-white transition-colors">
-                <LayoutGrid size={16} strokeWidth={2} />
+              <button aria-label="Grid view" className="w-9 h-7 flex items-center justify-center text-[#86868b] hover:text-white transition-colors">
+                <LayoutGrid size={16} strokeWidth={2} aria-hidden="true" />
               </button>
             </div>
 
-            <button className="text-[#86868b] hover:text-white transition-colors hover:rotate-180 duration-500 origin-center">
-              <RefreshCw size={18} strokeWidth={2.5} />
+            <button aria-label="Refresh window list" className="text-[#86868b] hover:text-white transition-colors hover:rotate-180 duration-500 origin-center">
+              <RefreshCw size={18} strokeWidth={2.5} aria-hidden="true" />
             </button>
           </div>
         </div>

@@ -24,7 +24,13 @@ export default function HeroCanvas() {
 
           <ContactShadows position={[0, -1.35, 0]} opacity={0.55} scale={10} blur={2.8} far={4} />
         </Suspense>
-        <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={Math.PI / 3} maxPolarAngle={Math.PI / 2} />
+        <OrbitControls 
+          enableZoom={false} 
+          enablePan={false} 
+          enableDamping={true} 
+          minPolarAngle={Math.PI / 3} 
+          maxPolarAngle={Math.PI / 2} 
+        />
       </Canvas>
     </div>
   );

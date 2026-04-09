@@ -39,6 +39,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light">
+      <head>
+        <link
+          rel="preload"
+          href="/model/macbook.glb"
+          as="fetch"
+          type="model/gltf-binary"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className={`${inter.variable} ${outfit.variable} font-sans bg-[#fbfbfd]`}>
         <Header />
         <SmoothScroll>{children}</SmoothScroll>

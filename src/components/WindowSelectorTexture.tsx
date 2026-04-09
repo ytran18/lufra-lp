@@ -11,7 +11,8 @@ function getHiDPIScale() {
   if (typeof window === "undefined") return 2;
   // Cap to keep GPU uploads reasonable but still crisp.
   const dpr = typeof window.devicePixelRatio === "number" ? window.devicePixelRatio : 1;
-  return Math.max(1, Math.min(3, Math.round(dpr * 2) / 2));
+  // Cap at 2x instead of 3x to ensure the initial canvas generation is snappy
+  return Math.max(1, Math.min(2, Math.round(dpr * 2) / 2));
 }
 
 function clamp01(t: number) {

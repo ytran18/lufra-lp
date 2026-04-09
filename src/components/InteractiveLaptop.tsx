@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useSpring, a } from "@react-spring/three";
 import { DoubleSide } from "three";
@@ -40,12 +40,14 @@ export function InteractiveLaptop(props: any) {
 
   // Entrance animation
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useLayoutEffect(() => {
+    setMounted(true);
+  }, []);
 
   const entranceAnim = useSpring({
     position: mounted ? [0, -0.6, 0] : [0, -3.5, -2],
     rotation: mounted ? [0, -Math.PI / 6, 0] : [Math.PI / 8, -Math.PI / 2, 0],
-    config: { mass: 2, tension: 150, friction: 30 },
+    config: { mass: 1, tension: 220, friction: 26 },
   });
 
   // Screen metrics

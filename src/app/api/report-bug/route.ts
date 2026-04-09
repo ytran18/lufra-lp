@@ -19,15 +19,23 @@ export async function POST(request: NextRequest) {
 
     // Check if environment variables are set
     if (!process.env.NOTION_TOKEN || !process.env.NOTION_DATABASE_ID) {
-      console.error('Missing Notion environment variables');
+      console.error('CRITICAL: Missing Notion environment variables');
       return NextResponse.json(
-        { error: 'Server configuration error' },
+        {
+          error: 'Server configuration error',
+          details: {
+            token: !!process.env.NOTION_TOKEN,
+            dbId: !!process.env.NOTION_DATABASE_ID
+          }
+        },
         { status: 500 }
       );
     }
 
+    console.log('Sending request to Notion with:', { email, type });
+
     // Add to Notion database
-    await notion.pages.create({
+    const response = await notion.pages.create({
       parent: {
         database_id: process.env.NOTION_DATABASE_ID,
       },
@@ -50,7 +58,7 @@ export async function POST(request: NextRequest) {
             name: type || 'Question',
           },
         },
-        Message: {
+        Text: {
           rich_text: [
             {
               text: {
@@ -61,32 +69,30 @@ export async function POST(request: NextRequest) {
         },
       },
     });
-
     return NextResponse.json(
-      { message: 'Successfully sent support request' },
+      { message: 'Successfully sent support request', id: response.id },
       { status: 200 }
     );
-  } catch (error) {
-    console.error('Error adding support request to Notion:', error);
-    
+  } catch (error: any) {
+    console.error('DETAILED ERROR adding support request to Notion:');
+
+    if (error.body) {
+      console.error('Error Body:', error.body);
+    }
+
     // Handle specific Notion API errors
-    if (error instanceof Error) {
-      if (error.message.includes('database_id')) {
-        return NextResponse.json(
-          { error: 'Database configuration error' },
-          { status: 500 }
-        );
-      }
-      if (error.message.includes('unauthorized')) {
-        return NextResponse.json(
-          { error: 'Authentication error' },
-          { status: 500 }
-        );
-      }
+    if (error.message.includes('database_id')) {
+      return NextResponse.json(
+        { error: 'Database ID is invalid or not found' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(
-      { error: 'Failed to send support request' },
+      {
+        error: 'Failed to send support request',
+        message: error.message
+      },
       { status: 500 }
     );
   }

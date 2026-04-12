@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const messageTypes = [
@@ -31,6 +31,31 @@ export default function Support() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  useEffect(() => {
+    const applyHash = () => {
+      if (typeof window === "undefined") return;
+
+      const raw = window.location.hash.replace(/^#/, "");
+      if (!raw) return;
+
+      // Supported hashes:
+      // - #support
+      // - #support-bug | #support-question | #support-feedback
+      if (raw === "support") return;
+      if (!raw.startsWith("support-")) return;
+
+      const maybeType = raw.slice("support-".length) as MessageType;
+      if (!messageTypes.some((t) => t.id === maybeType)) return;
+
+      setFormData((prev) => ({ ...prev, type: maybeType }));
+      document.getElementById("support")?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -68,6 +93,10 @@ export default function Support() {
 
   const handleTypeChange = (type: MessageType) => {
     setFormData((prev) => ({ ...prev, type }));
+    if (typeof window !== "undefined") {
+      // Update URL hash without causing page jump
+      window.history.replaceState(null, "", `#support-${type}`);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -129,7 +158,7 @@ export default function Support() {
   return (
     <section
       id="support"
-      className="w-full bg-[#fbfbfd] py-24 md:py-32 overflow-hidden"
+      className="w-full bg-[#fbfbfd] py-24 md:py-32 overflow-hidden scroll-mt-24"
     >
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
@@ -141,9 +170,12 @@ export default function Support() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col"
           >
-            <span className="text-xs font-bold tracking-[0.2em] text-[#86868b] mb-4 uppercase">
+            <a
+              href="#support"
+              className="text-xs font-bold tracking-[0.2em] text-[#86868b] mb-4 uppercase w-fit hover:opacity-80 transition-opacity"
+            >
               Support
-            </span>
+            </a>
             <h2 className="text-4xl md:text-6xl font-semibold tracking-tighter text-[#1d1d1f] leading-tight mb-8">
               We&apos;re here to help.
             </h2>
@@ -152,8 +184,29 @@ export default function Support() {
               message and our team will get back to you swiftly.
             </p>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap gap-3 mb-10">
               <a
+                href="#support-bug"
+                className="text-sm font-medium text-[#1d1d1f] bg-black/[0.04] hover:bg-black/[0.06] transition-colors rounded-full px-4 py-2"
+              >
+                Report Bug
+              </a>
+              <a
+                href="#support-question"
+                className="text-sm font-medium text-[#1d1d1f] bg-black/[0.04] hover:bg-black/[0.06] transition-colors rounded-full px-4 py-2"
+              >
+                Ask Question
+              </a>
+              <a
+                href="#support-feedback"
+                className="text-sm font-medium text-[#1d1d1f] bg-black/[0.04] hover:bg-black/[0.06] transition-colors rounded-full px-4 py-2"
+              >
+                Feedback
+              </a>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {/* <a
                 href="mailto:support@lufra.app"
                 className="text-[#1d1d1f] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
               >
@@ -175,7 +228,7 @@ export default function Support() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </a>
+              </a> */}
               <a
                 href="#"
                 className="text-[#1d1d1f] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"

@@ -357,7 +357,7 @@ export default function SettingsTabsDemo() {
       <div className="w-full px-4 sm:px-6 flex justify-center">
         <motion.div
           ref={containerRef}
-          className="relative w-full max-w-[800px] min-h-[480px] rounded-[16px] sm:rounded-[24px] shadow-[0_32px_64px_rgba(0,0,0,0.22)] border border-white/10 bg-[#1c1c1e] text-white font-sans text-left flex flex-col overflow-hidden"
+          className="relative w-full max-w-[800px] h-[600px] sm:h-[680px] rounded-[16px] sm:rounded-[24px] shadow-[0_32px_64px_rgba(0,0,0,0.22)] border border-white/10 bg-[#1c1c1e] text-white font-sans text-left flex flex-col overflow-hidden"
           initial={{ opacity: 0, y: 40, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -462,7 +462,7 @@ export default function SettingsTabsDemo() {
             </div>
 
             {/* ── Tab Content ───────────────────────────────────────── */}
-            <div className="w-full relative flex-1">
+            <div className="w-full relative flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <AnimatePresence mode="wait">
 
                 {/* ─────────────── CAPTURE TAB ────────────────────── */}

@@ -1,6 +1,7 @@
 import React from "react";
 import { ChevronRight } from "lucide-react";
 import HeroCanvas from "./HeroCanvas";
+import { GUMROAD_URL } from "@/constants/links";
 
 /**
  * Hero Component — Apple-esque Minimalism with 50/50 R3F Split
@@ -21,17 +22,20 @@ export default function Hero() {
 
         {/* Sub-headline */}
         <p className="max-w-xl text-lg sm:text-xl md:text-2xl text-[#86868b] leading-relaxed mb-10 tracking-tight drop-shadow-sm">
-          Snap any application window into a smooth Picture-in-Picture mode. 
+          Snap any application window into a smooth Picture-in-Picture mode. 
           Experience 60fps with zero latency and original macOS design.
         </p>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 z-20">
-          <button
-            className="group relative px-9 py-4 bg-[#1d1d1f] text-white rounded-full text-lg font-semibold transition-all hover:scale-105 hover:bg-black hover:shadow-xl hover:shadow-black/10 active:scale-95"
+          <a
+            href={GUMROAD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative px-9 py-4 bg-[#1d1d1f] text-white rounded-full text-lg font-semibold transition-all hover:scale-105 hover:bg-black hover:shadow-xl hover:shadow-black/10 active:scale-95 text-center inline-block"
           >
             Download for Free
-          </button>
+          </a>
 
           <button className="flex flex-row items-center gap-1 text-[#0066cc] hover:underline text-lg font-medium group transition-all">
             Watch the film

@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Apple } from "lucide-react";
+import { GUMROAD_URL } from "@/constants/links";
 
 export default function CtaFooter() {
   return (
@@ -24,15 +25,17 @@ export default function CtaFooter() {
           </p>
 
           <div className="mt-12 flex flex-col items-center">
-            <motion.button
-              type="button"
+            <motion.a
+              href={GUMROAD_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
               className="bg-[#1d1d1f] text-white rounded-full px-10 py-5 font-medium text-lg transition-transform flex items-center justify-center gap-2"
             >
               <Apple className="w-5 h-5" fill="currentColor" aria-hidden="true" />
               Download for macOS
-            </motion.button>
+            </motion.a>
             <p className="text-xs text-[#86868b] mt-6 font-medium tracking-tight">
               Requires macOS 13.0 or later. Universal for Intel and Apple Silicon.
             </p>

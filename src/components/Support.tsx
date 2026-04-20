@@ -132,7 +132,6 @@ export default function Support() {
         throw new Error(result.error || "Failed to send message to support");
       }
 
-      console.log("Support API Success:", result);
       setIsSuccess(true);
 
       // Reset form after success delay

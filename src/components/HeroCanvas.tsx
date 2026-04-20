@@ -17,7 +17,6 @@ export default function HeroCanvas() {
     if (isLoaded && !logged.current) {
       const endTime = performance.now();
       const loadTime = (endTime - startTime.current).toFixed(2);
-      console.log(`%c 🚀 HeroCanvas Loaded in ${loadTime}ms`, "background: #1d1d1f; color: #fff; padding: 4px 8px; border-radius: 4px;");
       logged.current = true;
     }
   }, [isLoaded]);

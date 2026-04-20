@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import SmoothScroll from "@/components/SmoothScroll";
+import { defaultSiteConfig } from "@/constants/default-site-config";
 
 // Limit to only actually-used weights to reduce font payload
 const inter = Inter({
@@ -21,14 +22,24 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(defaultSiteConfig.siteUrl),
   title: "Lufra — Picture-in-Picture for macOS",
   description:
     "Float any app above everything else. Resize freely, reposition effortlessly. Experience PiP with 60fps, zero latency, and native macOS design.",
   keywords: ["Picture in Picture", "macOS", "PiP", "productivity", "multitasking"],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Lufra — Picture-in-Picture for macOS",
     description: "Float any app above everything else with 60fps, zero latency.",
+    url: "/",
+    siteName: defaultSiteConfig.name,
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lufra — Picture-in-Picture for macOS",
+    description: "Float any app above everything else with 60fps, zero latency.",
   },
 };
 

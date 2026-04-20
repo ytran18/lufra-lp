@@ -8,10 +8,11 @@ import Link from "next/link";
 import { GUMROAD_URL } from "@/constants/links";
 
 const navLinks = [
-    { name: "Features", href: "#features" },
-    { name: "Guide", href: "#guide" },
-    { name: "Achievements", href: "#achievements" },
-    { name: "Settings", href: "#settings" },
+    { name: "Features", href: "/#features" },
+    { name: "Guide", href: "/#guide" },
+    { name: "Achievements", href: "/#achievements" },
+    { name: "Settings", href: "/#settings" },
+    { name: "Blog", href: "/blog" },
 ];
 
 /**

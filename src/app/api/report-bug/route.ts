@@ -32,8 +32,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Sending request to Notion with:', { email, type });
-
     // Add to Notion database
     const response = await notion.pages.create({
       parent: {

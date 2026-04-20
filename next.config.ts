@@ -8,6 +8,13 @@ const nextConfig: NextConfig = {
     // Reasonable device sizes for a landing page
     deviceSizes: [640, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    remotePatterns: [
+      { protocol: "https", hostname: "www.notion.so" },
+      { protocol: "https", hostname: "notion.so" },
+      { protocol: "https", hostname: "*.amazonaws.com" },
+      { protocol: "https", hostname: "img.notionusercontent.com" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+    ],
   },
   // Enable gzip/brotli compression for all responses
   compress: true,

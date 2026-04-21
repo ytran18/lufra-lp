@@ -1,6 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import HeroCanvasClient from "./HeroCanvasClient";
-import { GUMROAD_URL } from "@/constants/links";
+import { DEMO_VIDEO_URL, GUMROAD_URL } from "@/constants/links";
 
 /**
  * Hero Component — Apple-esque Minimalism with 50/50 R3F Split
@@ -37,10 +37,12 @@ export default function Hero() {
           </a>
 
           <a
-            href="#features"
+            href={DEMO_VIDEO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex flex-row items-center gap-1 text-[#0066cc] hover:underline text-lg font-medium group transition-all"
           >
-            See how it works
+            Watch demo
             <ChevronRight size={20} className="transition-transform group-hover:translate-x-0.5" />
           </a>
         </div>

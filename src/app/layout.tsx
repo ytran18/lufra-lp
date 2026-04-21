@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -21,16 +21,41 @@ const outfit = Outfit({
   preload: false, // secondary font, don't block render
 });
 
+const title = "Picture-in-Picture for macOS — Float Any Window";
+const description =
+  "Float any app above everything else. Resize freely, reposition effortlessly. Experience PiP with 60fps, zero latency, and native macOS design.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(defaultSiteConfig.siteUrl),
-  title: "Lufra — Picture-in-Picture for macOS",
-  description:
-    "Float any app above everything else. Resize freely, reposition effortlessly. Experience PiP with 60fps, zero latency, and native macOS design.",
-  keywords: ["Picture in Picture", "macOS", "PiP", "productivity", "multitasking"],
+  title: {
+    default: title,
+    template: `%s — ${defaultSiteConfig.name}`,
+  },
+  description,
+  applicationName: defaultSiteConfig.name,
+  authors: [{ name: defaultSiteConfig.name }],
+  creator: defaultSiteConfig.name,
+  publisher: defaultSiteConfig.name,
+  keywords: [
+    "Picture in Picture",
+    "macOS",
+    "PiP",
+    "productivity",
+    "multitasking",
+    "floating window",
+    "always on top",
+    "window manager",
+  ],
   alternates: { canonical: "/" },
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: [{ url: "/icon.png", sizes: "180x180", type: "image/png" }],
+  },
   openGraph: {
-    title: "Lufra — Picture-in-Picture for macOS",
-    description: "Float any app above everything else with 60fps, zero latency.",
+    title,
+    description,
     url: "/",
     siteName: defaultSiteConfig.name,
     type: "website",
@@ -38,9 +63,59 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lufra — Picture-in-Picture for macOS",
-    description: "Float any app above everything else with 60fps, zero latency.",
+    title,
+    description,
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfbfd" },
+    { media: "(prefers-color-scheme: dark)", color: "#1d1d1f" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: defaultSiteConfig.name,
+  url: defaultSiteConfig.siteUrl,
+  logo: `${defaultSiteConfig.siteUrl}${defaultSiteConfig.logo}`,
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: defaultSiteConfig.name,
+  url: defaultSiteConfig.siteUrl,
+};
+
+const softwareAppLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: defaultSiteConfig.name,
+  applicationCategory: "ProductivityApplication",
+  operatingSystem: "macOS 13.0+",
+  url: defaultSiteConfig.siteUrl,
+  description,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  image: `${defaultSiteConfig.siteUrl}${defaultSiteConfig.logo}`,
 };
 
 export default function RootLayout({
@@ -57,6 +132,18 @@ export default function RootLayout({
           as="fetch"
           type="model/gltf-binary"
           crossOrigin="anonymous"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppLd) }}
         />
       </head>
       <body className={`${inter.variable} ${outfit.variable} font-sans bg-[#fbfbfd]`}>

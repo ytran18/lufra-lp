@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { defaultSiteConfig } from "@/constants/default-site-config";
 
-const title = `Blog — ${defaultSiteConfig.name}`;
+const title = "Insights & Product Updates";
 const description = `Insights, guides, and product updates from the ${defaultSiteConfig.name} team.`;
 
 export const metadata: Metadata = {

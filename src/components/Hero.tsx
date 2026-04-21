@@ -1,6 +1,5 @@
-import React from "react";
 import { ChevronRight } from "lucide-react";
-import HeroCanvas from "./HeroCanvas";
+import HeroCanvasClient from "./HeroCanvasClient";
 import { GUMROAD_URL } from "@/constants/links";
 
 /**
@@ -37,10 +36,13 @@ export default function Hero() {
             Download for Free
           </a>
 
-          <button className="flex flex-row items-center gap-1 text-[#0066cc] hover:underline text-lg font-medium group transition-all">
-            Watch the film
+          <a
+            href="#features"
+            className="flex flex-row items-center gap-1 text-[#0066cc] hover:underline text-lg font-medium group transition-all"
+          >
+            See how it works
             <ChevronRight size={20} className="transition-transform group-hover:translate-x-0.5" />
-          </button>
+          </a>
         </div>
       </div>
 
@@ -50,7 +52,7 @@ export default function Hero() {
        * from being compressed on short/mobile viewports.
        */}
       <div className="w-full order-1 lg:order-2 h-[60vh] sm:h-[70vh] lg:h-screen min-h-[500px] lg:min-h-0 relative">
-        <HeroCanvas />
+        <HeroCanvasClient />
       </div>
 
     </section>

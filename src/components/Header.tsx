@@ -9,9 +9,8 @@ import { GUMROAD_URL } from "@/constants/links";
 
 const navLinks = [
     { name: "Features", href: "/#features" },
-    { name: "Guide", href: "/#guide" },
-    { name: "Achievements", href: "/#achievements" },
     { name: "Settings", href: "/#settings" },
+    { name: "Support", href: "/#support" },
     { name: "Blog", href: "/blog" },
 ];
 
@@ -52,7 +51,7 @@ export default function Header() {
                     <div className="relative w-8 h-8 md:w-9 md:h-9 rounded-xl overflow-hidden transition-all duration-500 group-hover:scale-110 shadow-sm border border-black/5 bg-white p-1">
                         <Image
                             src="/icon.png"
-                            alt="Lufra Logo"
+                            alt="Lufra — Picture-in-Picture for macOS"
                             fill
                             sizes="36px"
                             className="object-contain p-1"

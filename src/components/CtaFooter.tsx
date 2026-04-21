@@ -48,17 +48,23 @@ export default function CtaFooter() {
         <div className="container mx-auto py-10 md:py-12">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4">
             <div className="text-sm text-[#86868b] font-medium">
-              Lufra © 2026. <span className="text-[#1d1d1f]">Crafted for focus.</span>
+              Lufra © {new Date().getFullYear()}.{" "}
+              <span className="text-[#1d1d1f]">Crafted for focus.</span>
             </div>
             <nav aria-label="Footer links">
               <ul className="flex gap-8 list-none m-0 p-0">
-                {["Twitter", "Support", "Privacy", "Terms"].map((link) => (
-                  <li key={link}>
+                {[
+                  { label: "Blog", href: "/blog" },
+                  { label: "Support", href: "/#support" },
+                  { label: "Privacy", href: "/privacy" },
+                  { label: "Terms", href: "/terms" },
+                ].map((link) => (
+                  <li key={link.label}>
                     <a
-                      href="#"
+                      href={link.href}
                       className="text-sm text-[#86868b] hover:text-[#1d1d1f] transition-colors font-medium"
                     >
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}

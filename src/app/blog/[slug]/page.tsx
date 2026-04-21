@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  if (!post) return { title: "Post not found — Lufra" };
+  if (!post) return { title: "Post not found" };
 
   const url = `/blog/${post.slug}`;
   const description =
@@ -37,7 +37,7 @@ export async function generateMetadata({
     : undefined;
 
   return {
-    title: `${post.name} — ${defaultSiteConfig.name}`,
+    title: post.name,
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -182,7 +182,7 @@ export default async function BlogDetailPage({
                 {post.authors[0].avatar && (
                   <Image
                     src={post.authors[0].avatar}
-                    alt={post.authors[0].name}
+                    alt={`Author photo of ${post.authors[0].name}`}
                     width={32}
                     height={32}
                     className="h-8 w-8 rounded-full object-cover"

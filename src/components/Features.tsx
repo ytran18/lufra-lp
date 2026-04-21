@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -163,13 +162,6 @@ export default function Features() {
               <p className="text-[15px] md:text-[17px] leading-[1.65] text-[#6e6e73] max-w-full md:max-w-[360px]">
                 {feature.description}
               </p>
-
-              <a
-                href="#"
-                className="inline-flex items-center gap-[5px] mt-6 md:mt-7 text-[15px] font-medium text-[#0066cc] no-underline"
-              >
-                Learn more <ArrowRight size={13} />
-              </a>
             </motion.div>
           </motion.div>
         </AnimatePresence>

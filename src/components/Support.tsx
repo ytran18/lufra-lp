@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 const messageTypes = [
@@ -228,8 +229,8 @@ export default function Support() {
                   />
                 </svg>
               </a> */}
-              <a
-                href="#"
+              <Link
+                href="/blog"
                 className="text-[#1d1d1f] font-medium hover:opacity-70 transition-opacity flex items-center gap-2"
               >
                 Browse Documentation
@@ -250,7 +251,7 @@ export default function Support() {
                     strokeLinejoin="round"
                   />
                 </svg>
-              </a>
+              </Link>
             </div>
           </motion.div>
 

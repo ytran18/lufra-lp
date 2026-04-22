@@ -87,7 +87,7 @@ export default function Header() {
                         whileTap={{ scale: 0.95 }}
                         className="hidden sm:inline-flex bg-[#1d1d1f] text-white px-7 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shadow-xl shadow-black/5 hover:shadow-black/10 hover:bg-black"
                     >
-                        Download for Free
+                        Get Lufra
                     </motion.a>
 
                     {/* Mobile Menu Toggle */}
@@ -138,7 +138,7 @@ export default function Header() {
                                     transition={{ delay: 0.3 }}
                                     className="w-full bg-[#1d1d1f] text-white py-4 rounded-2xl font-bold mt-4 shadow-xl shadow-black/10 text-center block"
                                 >
-                                    Download for Free
+                                    Get Lufra
                                 </motion.a>
                             </div>
                         </div>

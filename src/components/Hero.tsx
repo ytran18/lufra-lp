@@ -33,7 +33,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="group relative px-9 py-4 bg-[#1d1d1f] text-white rounded-full text-lg font-semibold transition-all hover:scale-105 hover:bg-black hover:shadow-xl hover:shadow-black/10 active:scale-95 text-center inline-block"
           >
-            Download for Free
+            Get Lufra
           </a>
 
           <a
